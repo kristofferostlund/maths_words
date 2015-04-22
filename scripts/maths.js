@@ -1,6 +1,7 @@
 function analyzeWords(words) {
-  var arr = words.split(' ');
-  var wordCount = getCount(arr);
+  words = words.replace(/[^a-zA-Z ]/g, " ");
+  var arr = words.match(/\S+/g)
+    , wordCount = getCount(arr);
   document.getElementById('textOuput').textContent = getTopTen(wordCount);
 }
 
@@ -24,6 +25,7 @@ function getTopTen(wordList) {
 }
 
 function getCount(words) {
+  if(words == null || words.lenght < 1) { return []; }
   var counter = {};
   for (word of words) {
     if (word in counter) { counter[word]++; }
@@ -41,9 +43,22 @@ function getCount(words) {
     }
   }
 
-  arr.sort(-1);
+  arr.sort(compare);
+  arr.reverse();
 
   return arr;
+}
+
+function compare(a,b) {
+  if (firstValueOf(a) < firstValueOf(b)) { return -1; }
+  if (firstValueOf(a) > firstValueOf(b)) { return 1; }
+  return 0;
+}
+
+function firstValueOf(obj) {
+  for (key in obj) {
+    return obj[key];
+  }
 }
 
 function OnInput (event) {
