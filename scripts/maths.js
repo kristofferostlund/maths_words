@@ -7,12 +7,12 @@ function analyzeWords(words) {
 
 function getTopTen(wordList) {
   var arr = []
-    , init = -1;
-  if (wordList.length < 10) { init = 0; }
-  else { init = wordList.length - 11; }
+    , stop = -1;
+  if (wordList.length < 10) { stop = wordList.length; }
+  else { stop = 10; }
 
   j = 1;
-  for (var i = init; i < wordList.length; i++) {
+  for (var i = 0; i < stop; i++) {
     var key = Object.keys(wordList[i])[0]
       , str = j + ". "
             + '[' + wordList[i][key] + '] '
@@ -59,6 +59,14 @@ function firstValueOf(obj) {
   for (key in obj) {
     return obj[key];
   }
+}
+
+function OnClick() {
+  var textArea = document.getElementById('textInput');
+
+  // alert(textArea.value);
+
+  // analyzeWords(textArea.value);
 }
 
 function OnInput (event) {
