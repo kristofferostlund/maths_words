@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>Words</title>
@@ -8,19 +7,38 @@
     <link rel="stylesheet" href="css/master.css" media="screen" title="no title" charset="utf-8">
     <link href='http://fonts.googleapis.com/css?family=Roboto+Slab:400,700,300,100' rel='stylesheet' type='text/css'>
   </head>
-
   <body>
-
     <article class="app-container">
       <h1>Words</h1>
       <section>
-        <textarea name="name" rows="8" cols="40" placeholder="Input a piece of text you want analyzed." oninput="OnInput (event)" onpropertychange="OnPropChanged (event)"></textarea>
-        <!-- <textarea id="textInput" name="textInput" rows="8" cols="40" placeholder="Input a piece of text you want analyzed."></textarea> -->
-        <pre id="textOuput"></pre>
+        <textarea id="textInput" name="name" rows="8" cols="40" placeholder="Input a piece of text you want analyzed." oninput="OnInput(event)" onpropertychange="OnPropChanged(event)"></textarea>
       </section>
-      <button onclick="OnClick()">Analyze</button>
+      <section id="question1a">
+        <table>
+          <thead>
+            <th>Length of word</th>
+            <th>Number of words</th>
+          </thead>
+          <tbody id="frequencyTable">
+          </tbody>
+        </table>
+      </section>
+      <section id="question1b">
+        <h2 class="section-title">Mode median and mean</h2>
+        <div class="row">
+          <div class="col-1">Mode</div>
+          <div class="col-2" id="mode"></div>
+        </div>
+        <div class="row">
+          <div class="col-1">Median</div>
+          <div class="col-2" id="median"></div>
+        </div>
+        <div class="row">
+          <div class="col-1">Mean</div>
+          <div class="col-2" id="mean"></div>
+        </div>
+      </section>
     </article>
-
   </body>
   <script type="text/javascript" src="scripts/maths.js"></script>
 </html>
