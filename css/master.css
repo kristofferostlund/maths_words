@@ -16,7 +16,8 @@ body {
 }
 
 section {
-  width: 480px;
+  width: 440px;
+  max-width: 90%;
   background: #fafafa;
   margin: 3rem;
   -webkit-box-shadow: 0px 10px 64px -5px rgba(0,0,0,0.75);
@@ -115,7 +116,7 @@ tbody tr:nth-child(2n+1) {
 
 /* ---- SVG stuff ---- */
 
-.svg-container {
+.svg-container-1, .svg-container-2 {
   overflow-x: auto;
   overflow-y: hidden;
 }
