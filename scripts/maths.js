@@ -5,7 +5,16 @@ var width = 420
 
 var margin = { top: 20, right: 20, bottom: 20, left: 50 };
 
-var svg = d3.select(".svg-container")
+var svg = {}
+
+svg[1] = d3.select(".svg-container-1")
+    .append("svg")
+      .attr("height", height)
+      .attr("width", width)
+      .append("g")
+        .attr("transform","translate(" + margin.left + "," + margin.right + ")");
+
+svg[2] = d3.select(".svg-container-2")
     .append("svg")
       .attr("height", height)
       .attr("width", width)
@@ -21,11 +30,7 @@ var yScale = d3.scale.linear()
 var line = d3.svg.line()
   .x(function (d) { return xScale(d.x); })
   .y(function (d) { return yScale(d.y); })
-  .interpolate(interpolateLinear);
-
-function interpolateLinear(points) {
-  return points.join("L");
-}
+  .interpolate('linear');
 
 function getYMax(dataset) {
   if (dataset == null || dataset.length < 1) { return 0; }
@@ -62,7 +67,7 @@ function getXYArray(dataset) {
 
 // ---- Render stuff ----
 
-function render(dataset){
+function render(dataset, num){
 
   dataset = getXYArray(dataset);
   dataset.sort(orderX);
@@ -83,27 +88,27 @@ function render(dataset){
       .scale(xScale).orient('bottom');
 
   // if no axis exists, create them, otherwise update them
-  if (svg.selectAll(".y.axis")[0].length < 1 ) {
-    svg.append("g")
+  if (svg[num].selectAll(".y.axis")[0].length < 1 ) {
+    svg[num].append("g")
         .attr("class", "y axis")
         .call(yAxis);
   } else {
-    svg.selectAll(".y.axis").transition().duration(500).call(yAxis);
+    svg[num].selectAll(".y.axis").transition().duration(500).call(yAxis);
   }
 
-  if (svg.selectAll(".x.axis")[0].length < 1 ) {
-    svg.append("g")
+  if (svg[num].selectAll(".x.axis")[0].length < 1 ) {
+    svg[num].append("g")
         .attr("class", "x axis")
         .attr("transform", "translate(0," + (height - margin.top - margin.bottom) + ")")
         .call(xAxis);
   } else {
-    svg.selectAll(".x.axis").transition().duration(500).call(xAxis);
+    svg[num].selectAll(".x.axis").transition().duration(500).call(xAxis);
   }
 
   dataset = [ dataset ];
 
   // generate line paths
-  var lines = svg.selectAll(".line").data(dataset).attr("class", "line");
+  var lines = svg[num].selectAll(".line").data(dataset).attr("class", "line");
 
   // transition from previous paths to new paths
   lines.transition().duration(500)
@@ -121,7 +126,7 @@ function render(dataset){
 
   dataset = dataset[0];
 
-  var circles = svg.selectAll('circle').data(dataset);
+  var circles = svg[num].selectAll('circle').data(dataset);
 
   circles.transition().duration(500)
       .attr('cx', function (d) { return xScale(d.x); })
@@ -129,12 +134,12 @@ function render(dataset){
 
   circles.enter().append('circle')
     .attr('r', 5)
+    .attr('class', 'dot1')
     .attr('cx', function (d) { return xScale(d.x); })
     .attr('cy', function (d) { return yScale(d.y); });
 
   circles.exit()
     .remove();
-
 }
 
 // The "mean" is the "average" you're used to,
@@ -155,6 +160,7 @@ analyzeWords(mainText);
 
 var wordList = []
   , frequencyTable = []
+  , cumulativeFrequencyTable = []
   , modeWordLength = -1
   , medianWordLength = -1
   , meanWordLength = -1;
@@ -185,8 +191,11 @@ function analyzeWords(str) {
   modeWordLength = getMode(frequencyTable);
   document.getElementById('mode').textContent = modeWordLength;
 
+  cumulativeFrequencyTable = getCumulativeFrequencyTable(frequencyTable);
+  drawCumulativeFrequencyTable(document.getElementById('cumulativeFrequencyTable'), frequencyTable, cumulativeFrequencyTable);
 
-  render(frequencyTable);
+  render(frequencyTable, 1);
+  render(cumulativeFrequencyTable, 2);
 }
 
 function createWordList(words) {
@@ -214,7 +223,7 @@ function createFrequencyTable(wordList) {
     }
   }
 
-  arr.sort(sortObject);
+  arr.sort(sortByValue);
   arr.reverse();
 
   return arr;
@@ -265,11 +274,59 @@ function getMode(frequencyTable) {
   return firstKeyOf(frequencyTable[0]);
 }
 
+function getCumulativeFrequencyTable(data) {
+  data.sort(sortByKey);
+
+  var arr = [];
+
+  for (var i = 0; i < data.length; i++) {
+    if (i === 0) { arr.push(data[i]); }
+    else {
+      var key = firstKeyOf(data[i])
+        , value = firstValueOf(data[i]) + firstValueOf(arr[i - 1])
+        , o = {};
+        o[key] = value;
+      arr.push(o);
+    }
+  }
+
+  return arr;
+}
+
+function drawCumulativeFrequencyTable(tbody, tableData, cTableData) {
+
+  while (tbody.hasChildNodes()) {
+      tbody.removeChild(tbody.lastChild);
+  }
+
+  for (var i = 0; i < tableData.length; i++) {
+    var tr = tbody.insertRow()
+      , td1 = tr.insertCell()
+      , td2 = tr.insertCell()
+      , td3 = tr.insertCell();
+
+    td1.appendChild(document.createTextNode(firstKeyOf(cTableData[i])));
+    td2.appendChild(document.createTextNode(firstValueOf(tableData[i])));
+    td3.appendChild(document.createTextNode(firstValueOf(cTableData[i])));
+
+    tbody.appendChild(tr);
+  }
+
+  return tbody;
+}
+
+
+
 // ---- Helper methods ----
 
-function sortObject(a,b) {
-  if (firstValueOf(a) < firstValueOf(b)) { return -1; }
-  if (firstValueOf(a) > firstValueOf(b)) { return 1; }
+function sortByValue(a,b) {
+  if (Number(firstValueOf(a)) < Number(firstValueOf(b))) { return -1; }
+  if (Number(firstValueOf(a)) > Number(firstValueOf(b))) { return 1; }
+  return 0;
+}
+function sortByKey(a,b) {
+  if (Number(firstKeyOf(a)) < Number(firstKeyOf(b))) { return -1; }
+  if (Number(firstKeyOf(a)) > Number(firstKeyOf(b))) { return 1; }
   return 0;
 }
 
