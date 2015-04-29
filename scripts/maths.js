@@ -1,3 +1,119 @@
+// ---- D3 stuff ----
+
+var width = 420
+  , height = 400;
+
+var margin = { top: 20, right: 20, bottom: 20, left: 50 };
+
+var svg = d3.select(".svg-container")
+    .append("svg")
+      .attr("height", height)
+      .attr("width", width)
+      .append("g")
+        .attr("transform","translate(" + margin.left + "," + margin.right + ")");
+
+var xScale = d3.scale.linear()
+      .range([0, width - margin.left - margin.right]);
+
+var yScale = d3.scale.linear()
+      .range([height - margin.top - margin.bottom, 0]);
+
+var line = d3.svg.line()
+  .x(function (d) { return xScale(d.x); })
+  .y(function (d) { return yScale(d.y); })
+  .interpolate("monotone");
+
+function getYMax(dataset) {
+  if (dataset == null || dataset.length < 1) { return 0; }
+  var max = -1;
+  for (item of dataset) {
+    if (item.y > max) { max = item.y; }
+  }
+  return max;
+}
+
+function getXMax(dataset) {
+  if (dataset == null || dataset.length < 1) { return 0; }
+  var max = -1;
+  for (item of dataset) {
+    if (item.x > max) { max = item.x; }
+  }
+  return max;
+}
+
+function orderX(a,b) {
+  if (a.x < b.x) { return -1; }
+  if (a.x > b.x) { return 1; }
+  return 0;
+}
+
+function getXYArray(dataset) {
+  if (dataset == null || dataset.length < 1) { return []; }
+  var arr = [];
+  for (item of dataset) {
+    arr.push({ 'x': Number(firstKeyOf(item)), 'y': Number(firstValueOf(item)) });
+  }
+  return arr;
+}
+
+function render(dataset){
+
+  dataset = getXYArray(dataset);
+  dataset.sort(orderX);
+
+  var yMin = 0
+    , yMax = getYMax(dataset)
+    , xMin = 0
+    , xMax = getXMax(dataset);
+
+  // set domain for axes
+  yScale.domain([yMin, yMax]);
+  xScale.domain([xMin, xMax]);
+
+  // create axis scales
+  var yAxis = d3.svg.axis()
+      .scale(yScale).orient('left');
+  var xAxis = d3.svg.axis()
+      .scale(xScale).orient('bottom');
+
+  // if no axis exists, create them, otherwise update them
+  if (svg.selectAll(".y.axis")[0].length < 1 ) {
+    svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis);
+  } else {
+    svg.selectAll(".y.axis").transition().duration(500).call(yAxis);
+  }
+
+  if (svg.selectAll(".x.axis")[0].length < 1 ) {
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + (height - margin.top - margin.bottom) + ")")
+        .call(xAxis);
+  } else {
+    svg.selectAll(".x.axis").transition().duration(500).call(xAxis);
+  }
+
+  dataset = [ dataset ];
+
+  // generate line paths
+  var lines = svg.selectAll(".line").data(dataset).attr("class", "line");
+
+  // transition from previous paths to new paths
+  lines.transition().duration(500)
+    .attr("d", line);
+
+  // enter any new data
+  lines.enter()
+    .append("path")
+    .attr("class", "line")
+    .attr("d", line);
+
+  // exit
+  lines.exit()
+    .remove();
+}
+
 // The "mean" is the "average" you're used to,
 // where you add up all the numbers and then divide by the number of numbers.
 // The "median" is the "middle" value in the list of numbers. To find the median,
@@ -45,6 +161,9 @@ function analyzeWords(str) {
 
   modeWordLength = getMode(frequencyTable);
   document.getElementById('mode').textContent = modeWordLength;
+
+
+  render(frequencyTable);
 }
 
 function createWordList(words) {

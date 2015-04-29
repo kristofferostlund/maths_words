@@ -2,7 +2,8 @@
 
 body {
   font-family: "Roboto Slab", "Helvetica Neue", Helvetica, serif;
-  background-color: #4f4f4f;
+  background-color: #fafafa;
+  color: #404040;
 }
 
 .app-container {
@@ -17,6 +18,9 @@ body {
 section {
   background: #fafafa;
   margin-bottom: 20px;
+  -webkit-box-shadow: 0px 10px 64px -5px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 10px 64px -5px rgba(0,0,0,0.75);
+  box-shadow: 0px 10px 64px -5px rgba(0,0,0,0.75);
 }
 
 h1, h2 {
@@ -89,4 +93,15 @@ tbody tr:nth-child(2n+1) {
   display: inline;
   width: 70%;
   font-weight: bold;
+}
+
+.axis path, .axis line {
+  fill: none;
+  stroke: #404040;
+  shape-rendering: crispEdges;
+}
+
+.line {
+  fill: none;
+  stroke: #404040;
 }

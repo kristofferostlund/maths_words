@@ -6,11 +6,16 @@
     <link rel="stylesheet" href="css/reset.min.css" media="screen" title="no title" charset="utf-8">
     <link rel="stylesheet" href="css/master.css" media="screen" title="no title" charset="utf-8">
     <link href='http://fonts.googleapis.com/css?family=Roboto+Slab:400,700,300,100' rel='stylesheet' type='text/css'>
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
   </head>
   <body>
     <article class="app-container">
       <h1>Words</h1>
+
+      <section class="svg-container"></section>
+
       <section>
+        <h2 class="section-title">Input text</h2>
         <textarea id="textInput" name="name" rows="8" cols="40" placeholder="Input a piece of text you want analyzed." oninput="OnInput(event)" onpropertychange="OnPropChanged(event)"></textarea>
       </section>
       <section id="question1a">
@@ -39,6 +44,10 @@
         </div>
       </section>
     </article>
+
+
   </body>
   <script type="text/javascript" src="scripts/maths.js"></script>
+  <!-- // <script src="scripts/test.js"></script> -->
+
 </html>
