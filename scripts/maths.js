@@ -21,7 +21,11 @@ var yScale = d3.scale.linear()
 var line = d3.svg.line()
   .x(function (d) { return xScale(d.x); })
   .y(function (d) { return yScale(d.y); })
-  .interpolate("monotone");
+  .interpolate(interpolateLinear);
+
+function interpolateLinear(points) {
+  return points.join("L");
+}
 
 function getYMax(dataset) {
   if (dataset == null || dataset.length < 1) { return 0; }
@@ -55,6 +59,8 @@ function getXYArray(dataset) {
   }
   return arr;
 }
+
+// ---- Render stuff ----
 
 function render(dataset){
 
@@ -112,6 +118,23 @@ function render(dataset){
   // exit
   lines.exit()
     .remove();
+
+  dataset = dataset[0];
+
+  var circles = svg.selectAll('circle').data(dataset);
+
+  circles.transition().duration(500)
+      .attr('cx', function (d) { return xScale(d.x); })
+      .attr('cy', function (d) { return yScale(d.y); });
+
+  circles.enter().append('circle')
+    .attr('r', 5)
+    .attr('cx', function (d) { return xScale(d.x); })
+    .attr('cy', function (d) { return yScale(d.y); });
+
+  circles.exit()
+    .remove();
+
 }
 
 // The "mean" is the "average" you're used to,
