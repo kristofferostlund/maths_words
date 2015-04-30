@@ -32,6 +32,11 @@ var line = d3.svg.line()
   .y(function (d) { return yScale(d.y); })
   .interpolate('linear');
 
+var qLine = d3.svg.line()
+  .x(function (d) { return xScale(d.x); })
+  .y(function (d) { return yScale(d.y); })
+  .interpolate('linear');
+
 function getYMax(dataset) {
   if (dataset == null || dataset.length < 1) { return 0; }
   var max = -1;
@@ -67,7 +72,7 @@ function getXYArray(dataset) {
 
 // ---- Render stuff ----
 
-function render(dataset, num){
+function render(dataset, num, q1, q2){
 
   dataset = getXYArray(dataset);
   dataset.sort(orderX);
@@ -107,22 +112,50 @@ function render(dataset, num){
 
   dataset = [ dataset ];
 
-  // generate line paths
   var lines = svg[num].selectAll(".line").data(dataset).attr("class", "line");
 
-  // transition from previous paths to new paths
   lines.transition().duration(500)
     .attr("d", line);
 
-  // enter any new data
   lines.enter()
     .append("path")
     .attr("class", "line")
     .attr("d", line);
 
-  // exit
   lines.exit()
     .remove();
+
+  if (q1 != null || q1 != undefined) {
+    q1 = [q1];
+    var q1Lines = svg[num].selectAll('.q1line').data(q1).attr('class', 'q1line');
+
+    q1Lines.transition().duration(500)
+      .attr("d", qLine);
+
+    q1Lines.enter()
+      .append("path")
+      .attr("class", "q1line")
+      .attr("d", qLine);
+
+    q1Lines.exit()
+      .remove();
+  }
+
+  if (q2 != null || q2 != undefined) {
+    q2 = [q2];
+    var q2Lines = svg[num].selectAll('.q2line').data(q2).attr('class', 'q2line');
+
+    q2Lines.transition().duration(500)
+      .attr("d", qLine);
+
+    q2Lines.enter()
+      .append("path")
+      .attr("class", "q2line")
+      .attr("d", qLine);
+
+    q2Lines.exit()
+      .remove();
+  }
 
   dataset = dataset[0];
 
@@ -163,7 +196,9 @@ var wordList = []
   , cumulativeFrequencyTable = []
   , modeWordLength = -1
   , medianWordLength = -1
-  , meanWordLength = -1;
+  , meanWordLength = -1
+  , upperQuartile = -1
+  , lowerQuartile = -1;
 
   function OnInput (event) {
       analyzeWords(event.target.value);
@@ -191,15 +226,22 @@ function analyzeWords(str) {
   modeWordLength = getMode(frequencyTable);
   document.getElementById('mode').textContent = modeWordLength;
 
+  // Question 1(d)
   cumulativeFrequencyTable = getCumulativeFrequencyTable(frequencyTable);
   drawCumulativeFrequencyTable(document.getElementById('cumulativeFrequencyTable'), frequencyTable, cumulativeFrequencyTable);
 
+  // Question 1(e)
+  upperQuartile = getUpperQuartile(wordList, cumulativeFrequencyTable);
+  lowerQuartile = getLowerQuartile(wordList, cumulativeFrequencyTable);
+
   render(frequencyTable, 1);
-  render(cumulativeFrequencyTable, 2);
+  render(cumulativeFrequencyTable, 2, lowerQuartile, upperQuartile);
+
 }
 
 function createWordList(words) {
-  words = words.replace(/[^a-zA-Z0-9 ]/g, " ");
+  words = words.replace(/['-]/g, "");
+  words = words.replace(/[^a-öA-Ö0-9 ]/g, " ");
 
   return words.match(/\S+/g);
 }
@@ -260,9 +302,7 @@ function getMedian(wordList) {
   if (wordList == null ||  wordList.length < 1) { return -1; }
   if (wordList.length == 1) { return wordList[0].length; }
 
-  var arr = [];
-  for (word of wordList) { arr.push(word.length); }
-  arr.sort(sortNumber);
+  var arr = getSortedByWordLength(wordList);
 
   var index = Math.round((arr.length - 1)/2);
   if (arr.length % 1 == 1) { return arr[index] }
@@ -280,7 +320,7 @@ function getCumulativeFrequencyTable(data) {
   var arr = [];
 
   for (var i = 0; i < data.length; i++) {
-    if (i === 0) { arr.push(data[i]); }
+    if (i == 0) { arr.push(data[i]); }
     else {
       var key = firstKeyOf(data[i])
         , value = firstValueOf(data[i]) + firstValueOf(arr[i - 1])
@@ -315,9 +355,65 @@ function drawCumulativeFrequencyTable(tbody, tableData, cTableData) {
   return tbody;
 }
 
+function getUpperQuartile(words, cTable) {
 
+  if (words == null || words.length < 1) { return []; }
+
+  var arr = getQuartileCoordinates(cTable, words.length / 4 * 3);
+
+  return arr;
+}
+
+function getLowerQuartile(words, cTable) {
+
+  if (words == null || words.length < 1) { return []; }
+
+  words = getSortedByWordLength(words);
+
+  var arr = getQuartileCoordinates(cTable, words.length / 4);
+
+  return arr;
+}
+
+function getQuartileCoordinates(cTable, y) {
+  var arr = [];
+
+  arr.push({ 'x': 0, 'y': y});
+
+  var p1 = {}
+    , p2 = {};
+
+  for (var i = 0; i < cTable.length; i++) {
+    if (i == 0) { continue; }
+
+    if (firstValueOf(cTable[i - 1]) <= y && y <= firstValueOf(cTable[i])) {
+      p1 = { 'x': firstKeyOf(cTable[i - 1]),
+             'y': firstValueOf(cTable[i - 1])};
+      p2 = { 'x': firstKeyOf(cTable[i]),
+             'y': firstValueOf(cTable[i])};
+      break;
+    }
+  }
+
+  var k = (p2.y - p1.y) / (p2.x - p1.x);
+  var m = p1.y - (k*p1.x);
+  var x = (y - m) / k;
+
+  arr.push({ 'x': x, 'y': y });
+  arr.push({ 'x': x, 'y': 0 });
+
+  return arr;
+}
 
 // ---- Helper methods ----
+
+function getSortedByWordLength(words) {
+  var arr = [];
+  for (word of words) { arr.push(word.length); }
+  arr.sort(sortNumber);
+
+  return arr;
+}
 
 function sortByValue(a,b) {
   if (Number(firstValueOf(a)) < Number(firstValueOf(b))) { return -1; }

@@ -127,7 +127,7 @@ tbody tr:nth-child(2n+1) {
   shape-rendering: crispEdges;
 }
 
-.line {
+path {
   fill: none;
   stroke: #404040;
 }
@@ -141,6 +141,6 @@ circle {
   stroke: black;
 }
 circle:hover {
-  fill: #008888;
+  fill: #22CCEA;
   stroke: black;
 }
