@@ -1,3 +1,4 @@
+/// <reference path="../typings/d3/d3.d.ts"/>
 // ---- D3 stuff ----
 
 var width = 420
@@ -5,12 +6,12 @@ var width = 420
 
 var margin = { top: 20, right: 20, bottom: 20, left: 50 };
 
-var svg = {}
+var svg = {};
 
 svg[1] = d3.select(".svg-container-1")
-    .append("svg")
-      .attr("height", height)
-      .attr("width", width)
+  .append("svg")
+  .attr("height", height)
+  .attr("width", width)
       .append("g")
         .attr("transform","translate(" + margin.left + "," + margin.right + ")");
 
@@ -32,26 +33,25 @@ var line = d3.svg.line()
   .y(function (d) { return yScale(d.y); })
   .interpolate('linear');
 
-var qLine = d3.svg.line()
-  .x(function (d) { return xScale(d.x); })
-  .y(function (d) { return yScale(d.y); })
-  .interpolate('linear');
-
 function getYMax(dataset) {
   if (dataset == null || dataset.length < 1) { return 0; }
   var max = -1;
-  for (item of dataset) {
+ 
+  dataset.forEach(function(item) {
     if (item.y > max) { max = item.y; }
-  }
+  }, this);
+  
   return max;
 }
 
 function getXMax(dataset) {
   if (dataset == null || dataset.length < 1) { return 0; }
   var max = -1;
-  for (item of dataset) {
+  
+  dataset.forEach(function(item) {
     if (item.x > max) { max = item.x; }
-  }
+  }, this);
+  
   return max;
 }
 
@@ -64,15 +64,17 @@ function orderX(a,b) {
 function getXYArray(dataset) {
   if (dataset == null || dataset.length < 1) { return []; }
   var arr = [];
-  for (item of dataset) {
+  
+  dataset.forEach(function(item) {
     arr.push({ 'x': Number(firstKeyOf(item)), 'y': Number(firstValueOf(item)) });
-  }
+  }, this);
+  
   return arr;
 }
 
 // ---- Render stuff ----
 
-function render(dataset, num, q1, q2){
+function render(dataset, num, quartiles){
 
   dataset = getXYArray(dataset);
   dataset.sort(orderX);
@@ -124,40 +126,31 @@ function render(dataset, num, q1, q2){
 
   lines.exit()
     .remove();
+    
+    
+  if (quartiles != null || quartiles != undefined)
+  {    
+    var qLines = svg[num].selectAll(".qline").data(quartiles).attr("class", "qline");
 
-  if (q1 != null || q1 != undefined) {
-    q1 = [q1];
-    var q1Lines = svg[num].selectAll('.q1line').data(q1).attr('class', 'q1line');
-
-    q1Lines.transition().duration(500)
-      .attr("d", qLine);
-
-    q1Lines.enter()
+    qLines.transition().duration(500)
+      .attr("d", line);
+  
+    qLines.enter()
       .append("path")
-      .attr("class", "q1line")
-      .attr("d", qLine);
-
-    q1Lines.exit()
-      .remove();
-  }
-
-  if (q2 != null || q2 != undefined) {
-    q2 = [q2];
-    var q2Lines = svg[num].selectAll('.q2line').data(q2).attr('class', 'q2line');
-
-    q2Lines.transition().duration(500)
-      .attr("d", qLine);
-
-    q2Lines.enter()
-      .append("path")
-      .attr("class", "q2line")
-      .attr("d", qLine);
-
-    q2Lines.exit()
+      .attr("class", "qline")
+      .attr("d", line);
+  
+    qLines.exit()
       .remove();
   }
 
   dataset = dataset[0];
+//  if (quartiles != null || quartiles != undefined) {
+//    quartiles.forEach(function(q) {
+//      dataset.push(q[1]);
+//    }, this);
+//    console.log(dataset);
+//  }
 
   var circles = svg[num].selectAll('circle').data(dataset);
 
@@ -186,7 +179,7 @@ function render(dataset, num, q1, q2){
 /*
 ** Text from 50 Shades of Grey, page 195.
 */
-var mainText = "“Anastasia,” he warns, and I want to roll my eyes but quickly stop myself.  I stand facing the bed.  Sitting beside me, he gently pulls my sweatpants down again.  Up and down like whores’ drawers my subconscious remarks bitterly.  In my head, I tell her where to go.  Christian squirts baby oil into his hand and then rubs my behind with careful tenderness – from makeup remover to smoothing balm for a spanked ass, who would have thought it was such a versatile liquid. “I like my hands on you,” he murmurs, and I have to agree, me too. "
+var mainText = "“Anastasia,” he warns, and I want to roll my eyes but quickly stop myself.  I stand facing the bed.  Sitting beside me, he gently pulls my sweatpants down again.  Up and down like whores’ drawers my subconscious remarks bitterly.  In my head, I tell her where to go.  Christian squirts baby oil into his hand and then rubs my behind with careful tenderness – from makeup remover to smoothing balm for a spanked ass, who would have thought it was such a versatile liquid. “I like my hands on you,” he murmurs, and I have to agree, me too. ";
 
 document.getElementById('textInput').value = mainText;
 analyzeWords(mainText);
@@ -197,13 +190,14 @@ var wordList = []
   , modeWordLength = -1
   , medianWordLength = -1
   , meanWordLength = -1
-  , upperQuartile = -1
-  , lowerQuartile = -1;
+  , thirdQuartile = []
+  , secondQuartile = []
+  , firstQuartile = [];
 
-  function OnInput (event) {
+function OnInput (event) {
       analyzeWords(event.target.value);
   }
-  function OnPropChanged (event) {
+function OnPropChanged (event) {
       if (event.propertyName.toLowerCase () == "value") {
           analyzeWords(event.srcElement.value);
       }
@@ -231,11 +225,15 @@ function analyzeWords(str) {
   drawCumulativeFrequencyTable(document.getElementById('cumulativeFrequencyTable'), frequencyTable, cumulativeFrequencyTable);
 
   // Question 1(e)
-  upperQuartile = getUpperQuartile(wordList, cumulativeFrequencyTable);
-  lowerQuartile = getLowerQuartile(wordList, cumulativeFrequencyTable);
+  firstQuartile = getFirstQuartile(wordList, cumulativeFrequencyTable);
+  secondQuartile = getSecondQuartile(wordList, cumulativeFrequencyTable);
+  thirdQuartile = getThirdQuartile(wordList, cumulativeFrequencyTable);
+  
+  var quartiles = [ firstQuartile, secondQuartile, thirdQuartile ];
+  
 
   render(frequencyTable, 1);
-  render(cumulativeFrequencyTable, 2, lowerQuartile, upperQuartile);
+  render(cumulativeFrequencyTable, 2, quartiles);
 
 }
 
@@ -252,11 +250,11 @@ function createFrequencyTable(wordList) {
 
   if (wordList == null || wordList == undefined) { return []; }
 
-  for (word of wordList) {
+  wordList.forEach(function(word) {
     if (word.length in obj) { obj[word.length]++; }
     else { obj[word.length] = 1; }
-  }
-
+  }, this);
+  
   for (var key in obj) {
     if (obj.hasOwnProperty(key)) {
       var o = {};
@@ -276,8 +274,8 @@ function drawFrequencyTable(tbody, tableData) {
   while (tbody.hasChildNodes()) {
       tbody.removeChild(tbody.lastChild);
   }
-
-  for (row of tableData) {
+  
+  tableData.forEach(function(row) {
     var tr = tbody.insertRow()
       , td1 = tr.insertCell()
       , td2 = tr.insertCell();
@@ -286,7 +284,7 @@ function drawFrequencyTable(tbody, tableData) {
     td2.appendChild(document.createTextNode(firstValueOf(row)));
 
     tbody.appendChild(tr);
-  }
+  }, this);
 
   return tbody;
 }
@@ -294,7 +292,7 @@ function drawFrequencyTable(tbody, tableData) {
 function getMean(wordList) {
   var sum = 0;
   if (wordList == null || wordList.length < 1)  { return -1; }
-  for (word of wordList) { sum += word.length; }
+  wordList.forEach(function(word) { sum += word.length; }, this);
   return roundD(sum / wordList.length, 3);
 }
 
@@ -355,8 +353,7 @@ function drawCumulativeFrequencyTable(tbody, tableData, cTableData) {
   return tbody;
 }
 
-function getUpperQuartile(words, cTable) {
-
+function getThirdQuartile(words, cTable) {
   if (words == null || words.length < 1) { return []; }
 
   var arr = getQuartileCoordinates(cTable, words.length / 4 * 3);
@@ -364,14 +361,23 @@ function getUpperQuartile(words, cTable) {
   return arr;
 }
 
-function getLowerQuartile(words, cTable) {
+function getSecondQuartile(words, cTable) {
+  if (words == null || words.length < 1) { return []; }
 
+  words = getSortedByWordLength(words);
+
+  var arr = getQuartileCoordinates(cTable, words.length / 2);
+  
+  return arr;
+}
+
+function getFirstQuartile(words, cTable) {
   if (words == null || words.length < 1) { return []; }
 
   words = getSortedByWordLength(words);
 
   var arr = getQuartileCoordinates(cTable, words.length / 4);
-
+  
   return arr;
 }
 
@@ -409,7 +415,9 @@ function getQuartileCoordinates(cTable, y) {
 
 function getSortedByWordLength(words) {
   var arr = [];
-  for (word of words) { arr.push(word.length); }
+  
+  words.forEach(function(word) { arr.push(word.length); }, this);
+  
   arr.sort(sortNumber);
 
   return arr;

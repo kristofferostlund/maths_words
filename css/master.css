@@ -106,12 +106,7 @@ tbody tr:nth-child(2n+1) {
 
 .col-2 {
   display: inline;
-  width: 70%;
   font-weight: bold;
-}
-
-.section-container {
-
 }
 
 /* ---- SVG stuff ---- */
