@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Words</title>
+    <link rel="stylesheet" href="css/reset.min.css" media="screen" title="no title" charset="utf-8">
+    <link rel="stylesheet" href="css/old_master.css" media="screen" title="no title" charset="utf-8">
+    <link href='http://fonts.googleapis.com/css?family=Roboto+Slab:400,700,300,100' rel='stylesheet' type='text/css'>
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  </head>
+  <body>
+    <article class="app-container">
+      <h1>Words</h1>
+
+      <div class="section-container">
+
+        <section>
+          <h2 class="section-title">Input text</h2>
+          <textarea id="textInput" name="name" rows="8" cols="40" placeholder="Input a piece of text you want analyzed." oninput="OnInput(event)" onpropertychange="OnPropChanged(event)"></textarea>
+        </section>
+
+        <section id="question1b">
+          <h2 class="section-title">Mode median and mean</h2>
+          <div class="row">
+            <div class="col-1">Mode</div>
+            <div class="col-2" id="mode"></div>
+          </div>
+          <div class="row">
+            <div class="col-1">Median</div>
+            <div class="col-2" id="median"></div>
+          </div>
+          <div class="row">
+            <div class="col-1">Mean</div>
+            <div class="col-2" id="mean"></div>
+          </div>
+        </section>
+
+
+      </div>
+
+      <div class="section-container">
+        
+        <section id="question1d">
+          <h2 class="section-title">Cumulative frequency table</h2>
+          <table>
+            <thead>
+              <th>Length of <div>word</div></th>
+              <th>Number of <div>words</div></th>
+              <th>Cumulative <div>Frequency</div></th>
+            </thead>
+            <tbody id="cumulativeFrequencyTable">
+            </tbody>
+          </table>
+        </section>
+        
+        <section class="svg-container-2">
+          <h2 class="section-title">Cumulative frequency graph</h2>
+        </section>
+       
+      </div>
+
+      <div class="section-container">
+
+        <section id="question1a">
+          <h2 class="section-title">Frequency table</h2>
+          <table>
+            <thead>
+              <th>Length of <div>word</div></th>
+              <th>Number of <div>words</div></th>
+            </thead>
+            <tbody id="frequencyTable">
+            </tbody>
+          </table>
+        </section>
+
+        <section class="svg-container-1">
+          <h2 class="section-title">Frequency graph</h2>
+        </section>
+
+      </div>
+
+      <div class="section-container">
+        
+      </div>
+
+    </article>
+
+
+  </body>
+  <script type="text/javascript" src="scripts/helpers.js"></script>
+  <script type="text/javascript" src="scripts/graphs.js"></script>
+  <script type="text/javascript" src="scripts/tables.js"></script>
+  <script type="text/javascript" src="scripts/maths.js"></script>
+
+</html>

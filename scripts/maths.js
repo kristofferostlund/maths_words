@@ -1,173 +1,3 @@
-/// <reference path="../typings/d3/d3.d.ts"/>
-// ---- D3 stuff ----
-
-var width = 420
-  , height = 400;
-
-var margin = { top: 20, right: 20, bottom: 20, left: 50 };
-
-var svg = {};
-
-svg[1] = d3.select(".svg-container-1")
-  .append("svg")
-  .attr("height", height)
-  .attr("width", width)
-      .append("g")
-        .attr("transform","translate(" + margin.left + "," + margin.right + ")");
-
-svg[2] = d3.select(".svg-container-2")
-    .append("svg")
-      .attr("height", height)
-      .attr("width", width)
-      .append("g")
-        .attr("transform","translate(" + margin.left + "," + margin.right + ")");
-
-var xScale = d3.scale.linear()
-      .range([0, width - margin.left - margin.right]);
-
-var yScale = d3.scale.linear()
-      .range([height - margin.top - margin.bottom, 0]);
-
-var line = d3.svg.line()
-  .x(function (d) { return xScale(d.x); })
-  .y(function (d) { return yScale(d.y); })
-  .interpolate('linear');
-
-function getYMax(dataset) {
-  if (dataset == null || dataset.length < 1) { return 0; }
-  var max = -1;
- 
-  dataset.forEach(function(item) {
-    if (item.y > max) { max = item.y; }
-  }, this);
-  
-  return max;
-}
-
-function getXMax(dataset) {
-  if (dataset == null || dataset.length < 1) { return 0; }
-  var max = -1;
-  
-  dataset.forEach(function(item) {
-    if (item.x > max) { max = item.x; }
-  }, this);
-  
-  return max;
-}
-
-function orderX(a,b) {
-  if (a.x < b.x) { return -1; }
-  if (a.x > b.x) { return 1; }
-  return 0;
-}
-
-function getXYArray(dataset) {
-  if (dataset == null || dataset.length < 1) { return []; }
-  var arr = [];
-  
-  dataset.forEach(function(item) {
-    arr.push({ 'x': Number(firstKeyOf(item)), 'y': Number(firstValueOf(item)) });
-  }, this);
-  
-  return arr;
-}
-
-// ---- Render stuff ----
-
-function render(dataset, num, quartiles){
-
-  dataset = getXYArray(dataset);
-  dataset.sort(orderX);
-
-  var yMin = 0
-    , yMax = getYMax(dataset)
-    , xMin = 0
-    , xMax = getXMax(dataset);
-
-  // set domain for axes
-  yScale.domain([yMin, yMax]);
-  xScale.domain([xMin, xMax]);
-
-  // create axis scales
-  var yAxis = d3.svg.axis()
-      .scale(yScale).orient('left');
-  var xAxis = d3.svg.axis()
-      .scale(xScale).orient('bottom');
-
-  // if no axis exists, create them, otherwise update them
-  if (svg[num].selectAll(".y.axis")[0].length < 1 ) {
-    svg[num].append("g")
-        .attr("class", "y axis")
-        .call(yAxis);
-  } else {
-    svg[num].selectAll(".y.axis").transition().duration(500).call(yAxis);
-  }
-
-  if (svg[num].selectAll(".x.axis")[0].length < 1 ) {
-    svg[num].append("g")
-        .attr("class", "x axis")
-        .attr("transform", "translate(0," + (height - margin.top - margin.bottom) + ")")
-        .call(xAxis);
-  } else {
-    svg[num].selectAll(".x.axis").transition().duration(500).call(xAxis);
-  }
-
-  dataset = [ dataset ];
-
-  var lines = svg[num].selectAll(".line").data(dataset).attr("class", "line");
-
-  lines.transition().duration(500)
-    .attr("d", line);
-
-  lines.enter()
-    .append("path")
-    .attr("class", "line")
-    .attr("d", line);
-
-  lines.exit()
-    .remove();
-    
-    
-  if (quartiles != null || quartiles != undefined)
-  {    
-    var qLines = svg[num].selectAll(".qline").data(quartiles).attr("class", "qline");
-
-    qLines.transition().duration(500)
-      .attr("d", line);
-  
-    qLines.enter()
-      .append("path")
-      .attr("class", "qline")
-      .attr("d", line);
-  
-    qLines.exit()
-      .remove();
-  }
-
-  dataset = dataset[0];
-//  if (quartiles != null || quartiles != undefined) {
-//    quartiles.forEach(function(q) {
-//      dataset.push(q[1]);
-//    }, this);
-//    console.log(dataset);
-//  }
-
-  var circles = svg[num].selectAll('circle').data(dataset);
-
-  circles.transition().duration(500)
-      .attr('cx', function (d) { return xScale(d.x); })
-      .attr('cy', function (d) { return yScale(d.y); });
-
-  circles.enter().append('circle')
-    .attr('r', 5)
-    .attr('class', 'dot1')
-    .attr('cx', function (d) { return xScale(d.x); })
-    .attr('cy', function (d) { return yScale(d.y); });
-
-  circles.exit()
-    .remove();
-}
-
 // The "mean" is the "average" you're used to,
 // where you add up all the numbers and then divide by the number of numbers.
 // The "median" is the "middle" value in the list of numbers. To find the median,
@@ -269,26 +99,6 @@ function createFrequencyTable(wordList) {
   return arr;
 }
 
-function drawFrequencyTable(tbody, tableData) {
-
-  while (tbody.hasChildNodes()) {
-      tbody.removeChild(tbody.lastChild);
-  }
-  
-  tableData.forEach(function(row) {
-    var tr = tbody.insertRow()
-      , td1 = tr.insertCell()
-      , td2 = tr.insertCell();
-
-    td1.appendChild(document.createTextNode(firstKeyOf(row)));
-    td2.appendChild(document.createTextNode(firstValueOf(row)));
-
-    tbody.appendChild(tr);
-  }, this);
-
-  return tbody;
-}
-
 function getMean(wordList) {
   var sum = 0;
   if (wordList == null || wordList.length < 1)  { return -1; }
@@ -314,7 +124,6 @@ function getMode(frequencyTable) {
 
 function getCumulativeFrequencyTable(data) {
   data.sort(sortByKey);
-
   var arr = [];
 
   for (var i = 0; i < data.length; i++) {
@@ -331,28 +140,6 @@ function getCumulativeFrequencyTable(data) {
   return arr;
 }
 
-function drawCumulativeFrequencyTable(tbody, tableData, cTableData) {
-
-  while (tbody.hasChildNodes()) {
-      tbody.removeChild(tbody.lastChild);
-  }
-
-  for (var i = 0; i < tableData.length; i++) {
-    var tr = tbody.insertRow()
-      , td1 = tr.insertCell()
-      , td2 = tr.insertCell()
-      , td3 = tr.insertCell();
-
-    td1.appendChild(document.createTextNode(firstKeyOf(cTableData[i])));
-    td2.appendChild(document.createTextNode(firstValueOf(tableData[i])));
-    td3.appendChild(document.createTextNode(firstValueOf(cTableData[i])));
-
-    tbody.appendChild(tr);
-  }
-
-  return tbody;
-}
-
 function getThirdQuartile(words, cTable) {
   if (words == null || words.length < 1) { return []; }
 
@@ -363,27 +150,20 @@ function getThirdQuartile(words, cTable) {
 
 function getSecondQuartile(words, cTable) {
   if (words == null || words.length < 1) { return []; }
-
   words = getSortedByWordLength(words);
-
   var arr = getQuartileCoordinates(cTable, words.length / 2);
-  
   return arr;
 }
 
 function getFirstQuartile(words, cTable) {
   if (words == null || words.length < 1) { return []; }
-
   words = getSortedByWordLength(words);
-
   var arr = getQuartileCoordinates(cTable, words.length / 4);
-  
   return arr;
 }
 
 function getQuartileCoordinates(cTable, y) {
   var arr = [];
-
   arr.push({ 'x': 0, 'y': y});
 
   var p1 = {}
@@ -391,7 +171,7 @@ function getQuartileCoordinates(cTable, y) {
 
   for (var i = 0; i < cTable.length; i++) {
     if (i == 0) { continue; }
-
+    
     if (firstValueOf(cTable[i - 1]) <= y && y <= firstValueOf(cTable[i])) {
       p1 = { 'x': firstKeyOf(cTable[i - 1]),
              'y': firstValueOf(cTable[i - 1])};
@@ -409,47 +189,4 @@ function getQuartileCoordinates(cTable, y) {
   arr.push({ 'x': x, 'y': 0 });
 
   return arr;
-}
-
-// ---- Helper methods ----
-
-function getSortedByWordLength(words) {
-  var arr = [];
-  
-  words.forEach(function(word) { arr.push(word.length); }, this);
-  
-  arr.sort(sortNumber);
-
-  return arr;
-}
-
-function sortByValue(a,b) {
-  if (Number(firstValueOf(a)) < Number(firstValueOf(b))) { return -1; }
-  if (Number(firstValueOf(a)) > Number(firstValueOf(b))) { return 1; }
-  return 0;
-}
-function sortByKey(a,b) {
-  if (Number(firstKeyOf(a)) < Number(firstKeyOf(b))) { return -1; }
-  if (Number(firstKeyOf(a)) > Number(firstKeyOf(b))) { return 1; }
-  return 0;
-}
-
-function sortNumber(a,b) {
-  return a - b;
-}
-
-function firstValueOf(obj) {
-  for (key in obj) {
-    return obj[key];
-  }
-}
-
-function firstKeyOf(obj) {
-  for (key in obj) {
-    return key;
-  }
-}
-
-function roundD(value, decimals) {
-  return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
 }

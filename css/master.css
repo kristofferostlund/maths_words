@@ -1,65 +1,68 @@
-/* Main style begin */
+@font-face {
+  font-family: "Raleway";
+  src: url(./raleway/Raleway-Medium.ttf);
+}
 
 body {
-  font-family: "Roboto Slab", "Helvetica Neue", Helvetica, serif;
+  font-family: "Raleway", "Helvetica Neue", Helvetica, serif;
   background-color: #fafafa;
   color: #404040;
+  line-height: 150%;
 }
-
-.app-container {
-  margin: 0 auto;
-  width: 90%;
-  padding: 2rem;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
+*:focus {
+    outline: 0;
 }
-
-section {
-  width: 440px;
-  max-width: 90%;
-  background: #fafafa;
-  margin: 3rem;
-  -webkit-box-shadow: 0px 10px 64px -5px rgba(0,0,0,0.75);
-  -moz-box-shadow: 0px 10px 64px -5px rgba(0,0,0,0.75);
-  box-shadow: 0px 10px 64px -5px rgba(0,0,0,0.75);
-
-  flex-grow: 0;
-  flex-shrink: 0;
-}
-
-.section-container {
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: center;
-}
-
-h1, h2 {
-  text-align: center;
+h1, h2, h3 {
   font-size: 300%;
   font-weight: bold;
-  padding: 2rem;
+  padding: 2rem 0;
+  text-align: left;
+  line-height: 100%;
+}
+
+h1 {
+  text-decoration: underline;
 }
 
 h2 {
   font-size: 200%;
 }
 
-textarea {
-  font-family: "Roboto Slab", "Helvetica Neue", Helvetica, serif;
-  width: 100%;
-  height: 180px;
-  resize: none;
-  border: thin none;
-  padding: 0.5rem;
-  -webkit-box-sizing: border-box;
- -moz-box-sizing: border-box;
- box-sizing: border-box;
-  background-color: #fafafa;
+p {
+  padding: 0.5rem 0;
 }
 
-*:focus {
-    outline: 0;
+ul, ol {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  padding-left: 2rem;
+}
+ol {
+  list-style: lower-alpha;
+}
+li {
+  padding: 0.5rem 0;
+}
+
+em {
+  font-style: italic;
+}
+a, a:visited {
+  color: #404040;
+}
+a:hover {
+  background-color: #22CCEA;
+}
+
+article {
+  padding: 1rem;
+  margin: 2rem;
+  border-top: #bababa solid thin;
+}
+
+article:first-child {
+  border-top: thin none;
 }
 
 table {
@@ -85,28 +88,59 @@ tbody tr:nth-child(2n+1) {
   background-color: #bababa;
 }
 
-.section-title {
-  width: 80%;
-  border-bottom: 1px solid #bababa;
-  margin: 0 auto;
+/* ---- Side bar ---- */
+
+.side-bar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+	width: 25%;
+  -webkit-box-shadow: 0px 10px 64px -5px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 10px 64px -5px rgba(0,0,0,0.75);
+  box-shadow: 0px 10px 64px -5px rgba(0,0,0,0.75);
 }
 
-.row {
-  width: 80%;
-  margin: 0 auto;
-  padding: 0.5rem;
-  font-size: 150%;
+textarea {
+	width: 100%;
+  height: 100%;
+  font-family: "Raleway", "Helvetica Neue", Helvetica, serif;
+  line-height: 150%;
+	resize: none;
+  padding: 1rem;
+	background-color: #fafafa;
+	border: thin none;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
 }
 
-.col-1 {
+.column {
   display: inline-block;
-  width: 30%;
-  font-weight: lighter;
+  vertical-align: middle;
+  margin: 1rem 2rem 1rem 0;
+  min-width: 420px;
+  width: 480px;
 }
 
-.col-2 {
-  display: inline;
-  font-weight: bold;
+/* ---- Main content ---- */
+
+.section-title {
+  text-align: center;
+}
+
+.main-content {
+	width: 75%; 
+	overflow-y: scroll;
+  position: fixed;
+  left: 25%;
+  top: 0;
+  bottom: 0;
+  padding-left: 4rem;
+	border: thin none;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 /* ---- SVG stuff ---- */
@@ -115,22 +149,15 @@ tbody tr:nth-child(2n+1) {
   overflow-x: auto;
   overflow-y: hidden;
 }
-
 .axis path, .axis line {
   fill: none;
   stroke: #404040;
   shape-rendering: crispEdges;
 }
-
 path {
   fill: none;
   stroke: #404040;
 }
-
-svg {
-  padding-bottom: 2rem;
-}
-
 circle {
   fill: #404040;
   stroke: black;

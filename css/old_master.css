@@ -1,0 +1,140 @@
+/* Main style begin */
+
+body {
+  font-family: "Roboto Slab", "Helvetica Neue", Helvetica, serif;
+  background-color: #fafafa;
+  color: #404040;
+}
+
+.app-container {
+  margin: 0 auto;
+  width: 90%;
+  padding: 2rem;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+section {
+  width: 440px;
+  max-width: 90%;
+  background: #fafafa;
+  margin: 3rem;
+  -webkit-box-shadow: 0px 10px 64px -5px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 10px 64px -5px rgba(0,0,0,0.75);
+  box-shadow: 0px 10px 64px -5px rgba(0,0,0,0.75);
+
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
+.section-container {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+}
+
+h1, h2 {
+  text-align: center;
+  font-size: 300%;
+  font-weight: bold;
+  padding: 2rem;
+}
+
+h2 {
+  font-size: 200%;
+}
+
+textarea {
+  font-family: "Roboto Slab", "Helvetica Neue", Helvetica, serif;
+  width: 100%;
+  height: 100%;
+  resize: none;
+  border: thin none;
+  padding: 0.5rem;
+  -webkit-box-sizing: border-box;
+ -moz-box-sizing: border-box;
+ box-sizing: border-box;
+  background-color: #fafafa;
+}
+
+*:focus {
+    outline: 0;
+}
+
+table {
+  width: 100%;
+  text-align: center;
+  -webkit-box-sizing: border-box;
+ -moz-box-sizing: border-box;
+ box-sizing: border-box;
+}
+
+th {
+  font-weight: lighter;
+  font-size: 150%;
+  padding: 0.5rem;
+}
+
+td {
+  padding: 0.5rem;
+}
+
+tbody tr:nth-child(2n+1) {
+  background-color: #bababa;
+}
+
+.section-title {
+  width: 80%;
+  border-bottom: 1px solid #bababa;
+  margin: 0 auto;
+}
+
+.row {
+  width: 80%;
+  margin: 0 auto;
+  padding: 0.5rem;
+  font-size: 150%;
+}
+
+.col-1 {
+  display: inline-block;
+  width: 30%;
+  font-weight: lighter;
+}
+
+.col-2 {
+  display: inline;
+  font-weight: bold;
+}
+
+/* ---- SVG stuff ---- */
+
+.svg-container-1, .svg-container-2 {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.axis path, .axis line {
+  fill: none;
+  stroke: #404040;
+  shape-rendering: crispEdges;
+}
+
+path {
+  fill: none;
+  stroke: #404040;
+}
+
+svg {
+  padding-bottom: 2rem;
+}
+
+circle {
+  fill: #404040;
+  stroke: black;
+}
+circle:hover {
+  fill: #22CCEA;
+  stroke: black;
+}

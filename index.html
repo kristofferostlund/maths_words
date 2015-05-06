@@ -6,88 +6,110 @@
     <link rel="stylesheet" href="css/reset.min.css" media="screen" title="no title" charset="utf-8">
     <link rel="stylesheet" href="css/master.css" media="screen" title="no title" charset="utf-8">
     <link href='http://fonts.googleapis.com/css?family=Roboto+Slab:400,700,300,100' rel='stylesheet' type='text/css'>
-    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
   </head>
   <body>
-    <article class="app-container">
-      <h1>Words</h1>
-
-      <div class="section-container">
-
-        <section>
-          <h2 class="section-title">Input text</h2>
-          <textarea id="textInput" name="name" rows="8" cols="40" placeholder="Input a piece of text you want analyzed." oninput="OnInput(event)" onpropertychange="OnPropChanged(event)"></textarea>
-        </section>
-
-        <section id="question1b">
-          <h2 class="section-title">Mode median and mean</h2>
-          <div class="row">
-            <div class="col-1">Mode</div>
-            <div class="col-2" id="mode"></div>
-          </div>
-          <div class="row">
-            <div class="col-1">Median</div>
-            <div class="col-2" id="median"></div>
-          </div>
-          <div class="row">
-            <div class="col-1">Mean</div>
-            <div class="col-2" id="mean"></div>
-          </div>
-        </section>
-
-
+    
+    <section class="side-bar">
+      <textarea id="textInput" name="name" rows="8" cols="20" 
+                placeholder="Input a piece of text you want analyzed." 
+                oninput="OnInput(event)" 
+                onpropertychange="OnPropChanged(event)">
+      </textarea>
+    </section>
+    
+    <section class="main-content">
+      
+      
+      
+      <article id="question1b">
+      <h1>Mode median and mean</h1>
+      <div class="column">
+        <table>
+          <tbody>
+            <tr>
+              <td>Mode</td>
+              <td id="mode"></td>
+            </tr>
+            <tr>
+              <td>Median</td>
+              <td id="median"></td>
+            </tr>
+            <tr>
+              <td>Mean</td>
+              <td id="mean"></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-
-      <div class="section-container">
-        
-        <section id="question1d">
-          <h2 class="section-title">Cumulative frequency table</h2>
+      
+    </article>
+    
+    <article id="question1d">
+      <h1>Cumulative frequency</h1>
+        <div class="column">
           <table>
             <thead>
-              <th>Length of <div>word</div></th>
-              <th>Number of <div>words</div></th>
-              <th>Cumulative <div>Frequency</div></th>
+              <th>Length of word</th>
+              <th>Number of words</th>
+              <th>Cumulative Frequency</th>
             </thead>
             <tbody id="cumulativeFrequencyTable">
             </tbody>
           </table>
-        </section>
+        </div>
         
-        <section class="svg-container-2">
-          <h2 class="section-title">Cumulative frequency graph</h2>
-        </section>
-       
-      </div>
-
-      <div class="section-container">
-
-        <section id="question1a">
-          <h2 class="section-title">Frequency table</h2>
-          <table>
-            <thead>
-              <th>Length of <div>word</div></th>
-              <th>Number of <div>words</div></th>
-            </thead>
-            <tbody id="frequencyTable">
-            </tbody>
-          </table>
-        </section>
-
-        <section class="svg-container-1">
-          <h2 class="section-title">Frequency graph</h2>
-        </section>
-
-      </div>
-
-      <div class="section-container">
-
-
-      </div>
-
+        <div class="svg-container-2 column"></div>
+      
     </article>
-
-
+        
+    <article id="question1a">
+      
+      <h1>Frequency table</h1>
+      
+      <div class="column">
+        <table>
+          <thead>
+            <th>Length of word</th>
+            <th>Number of words</th>
+          </thead>
+          <tbody id="frequencyTable">
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="svg-container-1 column">
+      </div>
+      
+      
+    </article>
+    
+<!--    <article class="svg-container-1">
+      <h1>Frequency graph</h1>
+    </article>-->
+    
+    <article>
+        <h1>About</h1>
+        <p>My name is Kristoffer Östlund, and I am the author of this website. It's built mostly using plain JavaScript, HTML5 and CSS3, with the graphs being powered by <a target="_blank" href="http://d3js.org/">D3.js</a>. The repo can be found on my <a target="_blank" href="https://github.com/kristofferostlund/maths_words">GitHub, right here</a> if you fancy fiddling with it yourself.</p>
+        <p>I built this website to serve as a demonstration for a piece of coursework in a mathematics module at university. Though we've by no means have done any web development, I wanted to have an excuse to try out D3.js and do something cool with it.</p>
+        <p>This is really only one question, which consists of six parts:</p>
+        <ol>
+          <li>Count how many words there are in the article of different lengths and draw up a frequency table.</li>
+          <li>Calculate the <em>mode</em> word length, the <em>median</em> word length and the <em>mean</em> word length from your frequency table.</li>
+          <li>Which of the three averages in part (b) do you thnk is the most appropriate to use with your data and why?</li>
+          <li>Draw up a cumulative frequency table and from this draw a cumualitve frequency polygon.</li>
+          <li>Use the cumulative frequenct polygon to estimate the lower quartile and upper quartile.</li>
+          <li>How representative of the English language, in terms of word length, do you think your sample is, and why?</li>
+        </ol>
+        <p>The initial text snippet to the left is an excerpt from the 2011 book <a target="_blank" href="http://www.amazon.co.uk/Fifty-Shades-Grey-E-James/dp/0099579936">Fifty Shades of Grey</a>, written by <em>E. L. James</em>.</p>
+      </article>
+      
+    </section>
+    
   </body>
-  <script type="text/javascript" src="scripts/maths.js"></script>
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  <script src="scripts/helpers.js" charset="utf-8"></script>
+  <script src="scripts/graphs.js" charset="utf-8"></script>
+  <script src="scripts/tables.js" charset="utf-8"></script>
+  <script src="scripts/maths.js" charset="utf-8"></script>
 
 </html>
