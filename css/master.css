@@ -59,6 +59,9 @@ article {
   padding: 1rem;
   margin: 2rem;
   border-top: #bababa solid thin;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 article:first-child {
@@ -113,14 +116,14 @@ textarea {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
+  overflow-y: auto;
 }
 
 .column {
   display: inline-block;
   vertical-align: middle;
   margin: 1rem 2rem 1rem 0;
-  min-width: 420px;
-  width: 480px;
+  width: 420px;
 }
 
 /* ---- Main content ---- */
@@ -141,6 +144,36 @@ textarea {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
+}
+
+@media all and (max-width: 736px) {
+  .side-bar {
+    width: 100%;
+    height: 25%;
+  }
+  .main-content {
+    width: 100%;
+    left: 0;
+    top: 25%;
+    padding: 0;
+  }
+  
+  article {
+    margin: 0 auto;
+    width: 420px;
+    max-width: 100%;
+  }
+  .column {
+    max-width: 100%;
+    margin: 0 auto;
+  }
+}
+
+@media all and (max-width: 480px) {
+  th {
+    font-size: 100%;
+    font-weight: bold;
+  }
 }
 
 /* ---- SVG stuff ---- */
