@@ -42,13 +42,13 @@ function analyzeWords(str) {
 
   // Question 1(b)
   meanWordLength = getMean(wordList);
-  document.getElementById('mean').textContent = meanWordLength;
+  setTextByClass('mean', meanWordLength);
 
   medianWordLength = getMedian(wordList);
-  document.getElementById('median').textContent = medianWordLength;
+  setTextByClass('median', medianWordLength);
 
   modeWordLength = getMode(frequencyTable);
-  document.getElementById('mode').textContent = modeWordLength;
+  setTextByClass('mode', modeWordLength);
 
   // Question 1(d)
   cumulativeFrequencyTable = getCumulativeFrequencyTable(frequencyTable);
@@ -65,6 +65,15 @@ function analyzeWords(str) {
   render(frequencyTable, 1);
   render(cumulativeFrequencyTable, 2, quartiles);
 
+}
+
+function setTextByClass(className, text) {
+  var elements = document.getElementsByClassName(className);
+  for (var key in elements) {
+    if (elements.hasOwnProperty(key)) {
+      elements[key].textContent = text;
+    }
+  }
 }
 
 function createWordList(words) {

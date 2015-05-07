@@ -48,6 +48,9 @@ li {
 em {
   font-style: italic;
 }
+b {
+  font-weight: bold;
+}
 a, a:visited {
   color: #404040;
 }
@@ -124,6 +127,10 @@ textarea {
   vertical-align: middle;
   margin: 1rem 2rem 1rem 0;
   width: 420px;
+}
+
+.top-aligned {
+  vertical-align: top;
 }
 
 /* ---- Main content ---- */

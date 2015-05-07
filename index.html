@@ -36,22 +36,22 @@
     
     <section class="main-content">
       
-      <article id="question1b">
+      <article id="1b">
       <h1>Mode median and mean</h1>
       <div class="column">
         <table>
           <tbody>
             <tr>
               <td>Mode</td>
-              <td id="mode"></td>
+              <td class="mode"></td>
             </tr>
             <tr>
               <td>Median</td>
-              <td id="median"></td>
+              <td class="median"></td>
             </tr>
             <tr>
               <td>Mean</td>
-              <td id="mean"></td>
+              <td class="mean"></td>
             </tr>
           </tbody>
         </table>
@@ -59,7 +59,7 @@
       
     </article>
     
-    <article id="question1d">
+    <article id="1d">
       <h1>Cumulative frequency</h1>
         <div class="column">
           <table>
@@ -77,7 +77,7 @@
       
     </article>
         
-    <article id="question1a">
+    <article id="1a">
       
       <h1>Frequency table</h1>
       
@@ -98,20 +98,42 @@
       
     </article>
     
+    <article id="1cf">
+      
+      <h1>Answers to c and f</h1>
+      
+      <div class="column top-aligned">
+        <p>Let's begin with answering <b>part c</b>, which is whether I think either the mode, median or the mean is the best representative for the word length with my data. Just as a reminder, the mode is <span class="mode"></span>, the median is <span class="median"></span> and the mean is <span class="mean"></span>. <em>(The values change with the text, so I'm hoping there's some text input, as it otherise will be -1)</em>.</p>
+        <p>My initial thought was, <em>"It has to be the median, as I heard that's how you should do with house prices, and this is essentially the same."</em> What I figured though, since the question states <b>my data</b> (the initial text), I don't have to worry too much, as they are pretty much the same.</p>
+        <p>By looking at the <a href="#1a">frequency table and graph</a>, you should notice it's a quite close call between the first, second and third entry, thus just removing one or two words from the text would change the mode value, effectively eliminating that one as the most representative.</p>
+        <p>The topic of representation of the average is a fascinating one. After a mental refresher (googling around), I concluded that <em>for the initial data</em> the most appropriate way of representing a relatively small piece of text (98 words), <b>the median is the most representative</b>. This, mainly because the mean and median are so similar in this case, as well as using the mean often is seen as more accurate for small data sets.</p>
+        <p>Had it been a bigger sample, I probably would have went with the mean, as a collection on a greater scale often solves common problems which may have risen before, where the extremes may have sqewed data in a small samples.</p>
+      </div>
+      
+      <div class="column top-aligned">
+        <p>Regarding <b>part f</b>, which is whether I believe my sample is representative of the English language or not. My short answer is yes, and no.</p> 
+        <p>One of the percs of writing a more general solution is you get to try it out with different pieces of data without actually having to do much more than just copying and pasting. So obviously, I've tried a few different pieces of text of mine, as well as a few books I found online by googling "book in txt" and a <a target="_blank" href="http://www-01.sil.org/linguistics/wordlists/english/wordlist/wordsEn.txt">couple of</a> <a target="_blank" href="https://raw.githubusercontent.com/eneko/data-repository/master/data/words.txt">word collections</a>.</p>
+        <p>The results I got from my different trials were all over the place, as both word lists gave me a median and mean of about 8 characters per word, which is rather long, given my sample piece gave about half of that. So with respect to those two, I would say no, but then there's the distinction between the complete language, which <a target="_blank" href="http://www.telegraph.co.uk/technology/internet/8207621/English-language-has-doubled-in-size-in-the-last-century.html">according to the Telegraph</a> has over a million words in it and the words people actually use (obviously a much smaller collection).</p>
+        <p>As for the books I tried, the result aligned more with my findings, with a mean of about 4.5 per book (varied from ~4.3 to ~4.8). These books were obviously written by humans, which leads me to believe the word choices in the books may have been less <em>weird</em> than some of the entries in the word lists, I see them as more representative. Which in this case leans towards a yes.</p>
+        <p>Finall, I also tested out two papers I have written, where I got a result of ~5 characters per word instead, which is similar to what <a target="_blank" href="http://www.wolframalpha.com/input/?i=average+english+word+length">Wolfram Alpha</a> says as well. So I want to say <b>sort of, no, but still kind of yes</b>, because my very brief research has indicated both.</p>
+        
+      </div>
+    </article>
+    
     <article>
         <h1>About</h1>
         <p>My name is Kristoffer Östlund, and I am the author of this website. It's built mostly using plain JavaScript, HTML5 and CSS3, with the graphs being powered by <a target="_blank" href="http://d3js.org/">D3.js</a>. The repo can be found on my <a target="_blank" href="https://github.com/kristofferostlund/maths_words">GitHub, right here</a> if you fancy fiddling with it yourself.</p>
         <p>I built this website to serve as a demonstration for a piece of coursework in a mathematics module at university. Though we've by no means have done any web development, I wanted to have an excuse to try out D3.js and do something cool with it.</p>
         <p>This is really only one question, which consists of six parts:</p>
         <ol>
-          <li>Count how many words there are in the article of different lengths and draw up a frequency table.</li>
-          <li>Calculate the <em>mode</em> word length, the <em>median</em> word length and the <em>mean</em> word length from your frequency table.</li>
-          <li>Which of the three averages in part (b) do you thnk is the most appropriate to use with your data and why?</li>
-          <li>Draw up a cumulative frequency table and from this draw a cumualitve frequency polygon.</li>
-          <li>Use the cumulative frequenct polygon to estimate the lower quartile and upper quartile.</li>
-          <li>How representative of the English language, in terms of word length, do you think your sample is, and why?</li>
+          <li><a href="#1a">Count how many words there are in the article of different lengths and draw up a frequency table.</a></li>
+          <li><a href="#1b">Calculate the <em>mode</em> word length, the <em>median</em> word length and the <em>mean</em> word length from your frequency table.</a></li>
+          <li><a href="#1cf">Which of the three averages in part (b) do you thnk is the most appropriate to use with your data and why?</a></li>
+          <li><a href="#1d">Draw up a cumulative frequency table and from this draw a cumualitve frequency polygon.</a></li>
+          <li><a href="#1d">Use the cumulative frequenct polygon to estimate the lower quartile and upper quartile.</a></a></li>
+          <li><a href="#1cf">How representative of the English language, in terms of word length, do you think your sample is, and why?</a></a></li>
         </ol>
-        <p>The initial text snippet to the left is an excerpt from the 2011 book <a target="_blank" href="http://www.amazon.co.uk/Fifty-Shades-Grey-E-James/dp/0099579936">Fifty Shades of Grey</a>, written by <em>E. L. James</em>.</p>
+        <p>The initial text snippet is an excerpt from the 2011 book <a target="_blank" href="http://www.amazon.co.uk/Fifty-Shades-Grey-E-James/dp/0099579936">Fifty Shades of Grey</a>, written by <em>E. L. James</em>. A book which I have not read, but I chose the snippet because it's always fun to sneak in some naughty bits in education.</p>
       </article>
       
     </section>
