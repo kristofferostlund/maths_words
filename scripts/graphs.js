@@ -4,17 +4,19 @@
 var width = 420
   , height = 400;
 
-var margin = { top: 20, right: 20, bottom: 20, left: 50 };
+var margin = { top: 40, right: 20, bottom: 50, left: 60 };
 
 var svg = {};
 
+// Frequency graph
 svg[1] = d3.select(".svg-container-1")
   .append("svg")
-  .attr("height", height)
-  .attr("width", width)
-      .append("g")
-        .attr("transform","translate(" + margin.left + "," + margin.right + ")");
+    .attr("height", height)
+    .attr("width", width)
+    .append("g")
+      .attr("transform","translate(" + margin.left + "," + margin.right + ")");
 
+// Cumulative frequency graph
 svg[2] = d3.select(".svg-container-2")
     .append("svg")
       .attr("height", height)
@@ -23,15 +25,15 @@ svg[2] = d3.select(".svg-container-2")
         .attr("transform","translate(" + margin.left + "," + margin.right + ")");
 
 var xScale = d3.scale.linear()
-      .range([0, width - margin.left - margin.right]);
+    .range([0, width - margin.left - margin.right]);
 
 var yScale = d3.scale.linear()
-      .range([height - margin.top - margin.bottom, 0]);
+    .range([height - margin.top - margin.bottom, 0]);
 
 var line = d3.svg.line()
-  .x(function (d) { return xScale(d.x); })
-  .y(function (d) { return yScale(d.y); })
-  .interpolate('linear');
+    .x(function (d) { return xScale(d.x); })
+    .y(function (d) { return yScale(d.y); })
+    .interpolate('linear');
 
 function getYMax(dataset) {
   if (dataset == null || dataset.length < 1) { return 0; }
@@ -94,7 +96,7 @@ function render(dataset, num, quartiles){
   var xAxis = d3.svg.axis()
       .scale(xScale).orient('bottom');
 
-  // if no axis exists, create them, otherwise update them
+  // if no axis exists, create them, otherwise update them  
   if (svg[num].selectAll(".y.axis")[0].length < 1 ) {
     svg[num].append("g")
         .attr("class", "y axis")
@@ -105,11 +107,24 @@ function render(dataset, num, quartiles){
 
   if (svg[num].selectAll(".x.axis")[0].length < 1 ) {
     svg[num].append("g")
-        .attr("class", "x axis")
-        .attr("transform", "translate(0," + (height - margin.top - margin.bottom) + ")")
-        .call(xAxis);
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + (height - margin.top - margin.bottom) + ")")
+    .call(xAxis);
   } else {
     svg[num].selectAll(".x.axis").transition().duration(500).call(xAxis);
+  }
+  
+  if (svg[num].selectAll(".y.label")[0].length < 1) {
+    svg[num].append("text")
+      .attr("class", "y label")
+      .attr("transform", "translate(" + ( num === 2 ? -60 : -30) + ",-10)")
+      .text(num === 2 ? "Cumulative frequency" : "Frequency");
+  }
+  if (svg[num].selectAll(".x.label")[0].length < 1) {
+    svg[num].append("text")
+      .attr("class", "x label")
+      .attr("transform", "translate(" + (width - margin.left - margin.right - 65) / 2 + "," + (height - margin.bottom) + ")")
+      .text("Word length");
   }
 
   dataset = [ dataset ];
