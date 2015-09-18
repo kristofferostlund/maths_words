@@ -102,9 +102,18 @@ tbody tr:nth-child(2n+1) {
   top: 0;
   bottom: 0;
 	width: 25%;
-  -webkit-box-shadow: 0px 10px 64px -5px rgba(0,0,0,0.75);
+  /*-webkit-box-shadow: 0px 10px 64px -5px rgba(0,0,0,0.75);
   -moz-box-shadow: 0px 10px 64px -5px rgba(0,0,0,0.75);
-  box-shadow: 0px 10px 64px -5px rgba(0,0,0,0.75);
+  box-shadow: 0px 10px 64px -5px rgba(0,0,0,0.75);*/
+}
+.side-bar::before {
+  content: "";
+  border-right: 1px solid #bababa;
+  top: 1rem;
+  bottom: 1rem;
+  position: absolute;
+  z-index: 1;
+  right: 0;
 }
 
 textarea {
@@ -120,6 +129,11 @@ textarea {
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   overflow-y: auto;
+  color: #808080;
+  transition: color 0.2s;
+}
+textarea:hover, textarea:active, textarea:focus {
+  color: #404040;
 }
 
 .column {
@@ -155,14 +169,23 @@ textarea {
 
 @media all and (max-width: 736px) {
   .side-bar {
+    position: static;
     width: 100%;
-    height: 25%;
+    /*-webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;*/
+  }
+  .side-bar::after {
+    content: "";
+    border-bottom: 1px solid #404040;
+    display: block;
+    margin: 0 2rem;
   }
   .main-content {
+    position: static;
     width: 100%;
-    left: 0;
-    top: 25%;
     padding: 0;
+    overflow: visible;
   }
   
   article {
